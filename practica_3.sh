@@ -1,5 +1,5 @@
 #!/bin/bash
-#Autores: Santiago Jimenez (780960) y Fernando Gomez ()
+#Autores: Santiago Jimenez (780960) y Fernando Gomez (774762)
 
 #Comprobacion de privilegios de administracion
 if [ $UID -ne 0 ]; then
@@ -30,17 +30,10 @@ n=150
 
 while read line
 do
-	echo "$n He leido "${line}""
 	let "n+=1"
-
 	usr=$(echo "${line}" | cut -d ',' -f1)
 	pass=$(echo "${line}" | cut -d ',' -f2)
 	complete_name=$(echo "${line}" | cut -d ',' -f3)
-	echo "User: ${usr}, password: ${pass}, nomcomp: ${complete_name}."
-	
-	if [ -z $complete_name ]; then
-		echo "wat"
-	fi
 	
 	#Comprobacion si se desea anyadir
 	if [ $op = "-a" ]; then

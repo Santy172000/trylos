@@ -1,0 +1,12 @@
+#Santiago Jiménez (780960), Fernando Gómez (774762)
+Informe de las decisiones de diseño tomadas
+
+-Antes de entrar al bucle, si sabemos que la opción seleccionada es la de suprimir, creamos el fichero donde van a ir a parar los comprimidos. (Hacemos mkdir -p para que cree el directorio padre en el caso de que éste no exista)
+-Después, en cada iteración del bucle, al leer una línea almacenamos los 3 campos que deben estar en 3 variables para facilitar su uso durante el resto del programa. Estas variables son: 
+	·usr, que corresponde al identificador del usuario
+	·pass, que corresponde a la contraseña del usuario especificado previamente
+	·complete_name, que identifica al usuario que se está tratando
+-El cuerpo del while lo dividimos en dos partes excluyentes entre sí: La ejecución del -s y la ejecución del -a. (Podríamos haber discriminado la opción antes del bucle, pero decidimos que haciéndolo así sería menos legible que la forma en la que lo hemos codificado finalmente. No obstante, este código evalúa la misma condición tantas veces como líneas tiene el fichero de entrada)
+-Tanto en la adición como en la supresión, lo primero que se hace es comprobar si se tienen los argumentos suficientes como para seguir el programa
+-Respecto al -a, creamos manualmente el grupo donde se va a introducir el usuario, comprobando si en /etc/group hay un grupo con su mismo identificador, y en caso contrario lo creamos para luego añadirlo con -g $usr
+-Respecto al -s, para que el programa sea más robusto, se busca explícitamente cuál es el directorio home de cada usuario, consultando directamente el sexto parámetro de la línea correspondiente del fichero /etc/passwd
