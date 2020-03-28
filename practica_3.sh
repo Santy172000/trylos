@@ -68,7 +68,7 @@ do
 			fi
 	
 			#Creamos el usuario con las especificaciones pedidas
-			useradd -f 30 -g "$usr" -K UID_MIN=1815 -m -k /etc/skel $usr
+			useradd -c "$complete_name" -f 30 -g "$usr" -K UID_MIN=1815 -m -k /etc/skel $usr #-c -U
 
 			
 			#Le cambiamos la contrasenya al usuario
@@ -76,6 +76,7 @@ do
 			input+=":"
 			input+="$pass"
 			echo $input | chpasswd
+			usermod -f 30 "$usr"
 
 			echo ""${complete_name}" ha sido creado"
 
@@ -92,8 +93,10 @@ do
 		exists=$(grep -c "^"${usr}":" /etc/passwd)
 		#Si el usuario existe, seguimos con el borrado. Sino, no hacemos nada
 		if [ $exists -eq 1 ]; then
+			#Obtenemos el home
+			home=$(grep $usr /etc/passwd | cut -d ':' -f6)
 			#Comprimimos el home
-			tar -cvf ${usr}.tar /home/$usr
+			tar -cvf ${usr}.tar $home
 			ex1=$?
 			cp ${usr}.tar /extra/backup
 			ex2=$?
@@ -101,7 +104,8 @@ do
 			#Solo continuaremos si se ha hecho el backup bien
 			if [ $ex1 -eq 0 ] && [ $ex2 -eq 0 ]; then
 				rm ${usr}.tar #borramos el .tar temporal
-				rm -r /home/$usr
+				rm -r $home
+				userdel -r "${usr}"
 			fi
 
 		fi
